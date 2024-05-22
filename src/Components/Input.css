@@ -1,0 +1,34 @@
+input{
+    box-shadow: rgba(0, 0, 0, 0.08) 0px 0px 2px 0px, rgba(0, 0, 0, 0.16) 0px 2px 4px 0px;
+    transition: all 0.3s ease;
+    height: 80px;
+    text-align: center;
+    width: 500px;
+    border-radius: 60px !important;
+    font-weight: 500;
+    font-size: 28px;
+}
+
+.input{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+input:hover{
+    box-shadow: rgba(0, 0, 0, 0.08) 0px 0px 2px 0px, rgba(0, 0, 0, 0.30) 0px 3px 4px 0px;
+}
+
+@media (max-width: 719px){
+    input{
+        height: 73px;
+        width: 90%;
+        margin: auto;
+    }
+
+
+    button{
+        width: 90%;
+        margin: auto;
+    }
+}
