@@ -36,8 +36,8 @@ html, body, #root{
 }
 
 
-@media (max-width: 719px){
-    .main{
+@media (max-width: 739px){
+    .search-bar{
         flex-direction: column;
     }
 

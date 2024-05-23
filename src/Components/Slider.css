@@ -12,10 +12,12 @@
 
 .slider-main{
     display: flex;
+    width: 100%;
     justify-content: center;
     align-items: center;
     gap: 24px;
     flex-direction: row;
+    text-align: center;
 }
 
 .slider-main h3{
@@ -32,4 +34,10 @@ input[type="range"]::-webkit-slider-thumb {
     border-radius: 50%;
     background: rgb(228, 45, 66);
     cursor: pointer;
+}
+
+@media (max-width: 739px) {
+    .slider-main{
+        flex-direction: column;
+    }
 }
