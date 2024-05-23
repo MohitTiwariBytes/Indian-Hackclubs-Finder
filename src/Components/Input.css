@@ -1,4 +1,4 @@
-input{
+.input input{
     box-shadow: rgba(0, 0, 0, 0.08) 0px 0px 2px 0px, rgba(0, 0, 0, 0.16) 0px 2px 4px 0px;
     transition: all 0.3s ease;
     height: 80px;
@@ -11,16 +11,22 @@ input{
 
 .input{
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     width: 100%;
+    align-items: center;
 }
 
-input:hover{
+.input input:hover{
     box-shadow: rgba(0, 0, 0, 0.08) 0px 0px 2px 0px, rgba(0, 0, 0, 0.30) 0px 3px 4px 0px;
 }
 
+.input i{
+    position: absolute;
+    margin-left: 42px;
+}
+
 @media (max-width: 719px){
-    input{
+    .input input{
         height: 73px;
         width: 90%;
         margin: auto;
@@ -30,5 +36,11 @@ input:hover{
     button{
         width: 90%;
         margin: auto;
+    }
+}
+
+@media (max-width: 400px) {
+    .input i{
+        display: none;
     }
 }

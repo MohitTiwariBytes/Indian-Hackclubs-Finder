@@ -295,9 +295,7 @@ button.cta {
   box-shadow: var(--shadow-elevated);
 }
 
-input,
-textarea,
-select {
+.input input {
   background: var(--elevated);
   color: var(--text);
   font-family: inherit;
@@ -307,29 +305,6 @@ select {
   appearance: none;
 }
 
-input::-webkit-input-placeholder,
-input::-moz-placeholder,
-input:-ms-input-placeholder,
-textarea::-webkit-input-placeholder,
-textarea::-moz-placeholder,
-textarea:-ms-input-placeholder,
-select::-webkit-input-placeholder,
-select::-moz-placeholder,
-select:-ms-input-placeholder {
-  color: var(--muted);
-}
-
-input[type="search"]::-webkit-search-decoration,
-textarea[type="search"]::-webkit-search-decoration,
-select[type="search"]::-webkit-search-decoration {
-  display: none;
-}
-
-input[type="checkbox"] {
-  -webkit-appearance: checkbox;
-  -moz-appearance: checkbox;
-  appearance: checkbox;
-}
 
 label {
   color: var(--text);
