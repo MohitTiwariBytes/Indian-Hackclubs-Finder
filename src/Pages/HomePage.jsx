@@ -64,7 +64,7 @@ const HomePage = () => {
     if (coordinates.latitude && coordinates.longitude) {
       main(coordinates.longitude, coordinates.latitude, sliderValue);
     }
-  }, [coordinates, sliderValue]);
+  }, [coordinates, sliderValue, main]);
 
   async function main(longitudeInput, latitudeInput, maxDistanceInput) {
     try {
