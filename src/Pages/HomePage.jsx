@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./HomePage.css";
 import Input from "../Components/Input";
+
 const HomePage = () => {
   const [location, setLocation] = useState("");
   const [coordinates, setCoordinates] = useState({
@@ -63,7 +64,7 @@ const HomePage = () => {
     if (coordinates.latitude && coordinates.longitude) {
       main(coordinates.longitude, coordinates.latitude, sliderValue);
     }
-  }, [coordinates]);
+  }, [coordinates, sliderValue]);
 
   async function main(longitudeInput, latitudeInput, maxDistanceInput) {
     try {
