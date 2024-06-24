@@ -1,13 +1,19 @@
-import React from 'react';
-import './Input.css';
+import React from "react";
+import "./Input.css";
 
-const Input = ({placeholder}) => {
+const Input = ({ placeholder, value, onChange }) => {
+  
   return (
     <div className="main-input">
-        <div className="input">
-            <input type="text" placeholder={placeholder} /> 
-            <i class="fa-solid fa-magnifying-glass fa-2x"></i>
-        </div>
+      <div className="input">
+        <input
+          type="text"
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+        />
+        <i className="fa-solid fa-magnifying-glass fa-2x"></i>
+      </div>
     </div>
   );
 };
