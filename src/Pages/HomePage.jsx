@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import "./HomePage.css";
 import Input from "../Components/Input";
@@ -37,8 +37,7 @@ const HomePage = () => {
       });
   }
 
-  // Haversine formula to calculate the great-circle distance between two points
-  function haversine(lat1, lon1, lat2, lon2) {
+  const haversine = useCallback((lat1, lon1, lat2, lon2) => {
     const R = 6371; // Radius of the Earth in kilometers
     const dlat = degreesToRadians(lat2 - lat1);
     const dlon = degreesToRadians(lon2 - lon1);
@@ -50,82 +49,75 @@ const HomePage = () => {
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const distance = R * c;
     return distance;
-  }
+  }, []);
 
   function degreesToRadians(degrees) {
     return (degrees * Math.PI) / 180;
   }
 
-  // Fetch the data from the URL
-  const url =
-    'https://api2.hackclub.com/v0.1/Operations/Clubs?select={"fields":["Address Country","Name","Latitude","Longitude","Slack Channel ID"]}';
-
-  useEffect(() => {
-    async function main(longitudeInput, latitudeInput, maxDistanceInput) {
+  const main = useCallback(
+    async (longitudeInput, latitudeInput, maxDistanceInput) => {
+      const url =
+        'https://api2.hackclub.com/v0.1/Operations/Clubs?select={"fields":["Address Country","Name","Latitude","Longitude","Slack Channel ID"]}';
       try {
         const response = await axios.get(url);
-        // Rest of your main function logic...
+        const obj = response.data;
+        let gps = [];
+        let names = [];
+
+        // Extract latitude, longitude, and names from the fetched data
+        obj.forEach((x) => {
+          const latitude = x.fields["Latitude"]
+            ? x.fields["Latitude"][0]
+            : null;
+          const longitude = x.fields["Longitude"]
+            ? x.fields["Longitude"][0]
+            : null;
+          const name = x.fields["Name"] || null;
+          if (latitude !== null && longitude !== null) {
+            gps.push([parseFloat(latitude), parseFloat(longitude)]);
+            names.push(name);
+          }
+        });
+
+        const lat = latitudeInput;
+        const long = longitudeInput;
+        const maxDistance = maxDistanceInput;
+
+        const user = [lat, long];
+
+        // Calculate distances
+        let distList = [];
+        names.forEach((name, index) => {
+          const coords = gps[index];
+          if (coords[0] !== null && coords[1] !== null) {
+            const distance = haversine(user[0], user[1], coords[0], coords[1]);
+            distList.push({ distance, name, coords });
+          }
+        });
+
+        // Filter locations within the maximum distance
+        const filteredLocations = distList.filter(
+          (item) => item.distance <= maxDistance
+        );
+
+        // Sort the filtered locations by distance
+        filteredLocations.sort((a, b) => a.distance - b.distance);
+
+        // Store all locations in state
+        setLocations(filteredLocations);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
-    }
+    },
+    [haversine]
+  );
 
+  useEffect(() => {
     if (coordinates.latitude && coordinates.longitude) {
       main(coordinates.longitude, coordinates.latitude, sliderValue);
     }
-  }, [coordinates, sliderValue]);
-
-  async function main(longitudeInput, latitudeInput, maxDistanceInput) {
-    try {
-      const response = await axios.get(url);
-      const obj = response.data;
-      let gps = [];
-      let names = [];
-
-      // Extract latitude, longitude, and names from the fetched data
-      obj.forEach((x) => {
-        const latitude = x.fields["Latitude"] ? x.fields["Latitude"][0] : null;
-        const longitude = x.fields["Longitude"]
-          ? x.fields["Longitude"][0]
-          : null;
-        const name = x.fields["Name"] || null;
-        if (latitude !== null && longitude !== null) {
-          gps.push([parseFloat(latitude), parseFloat(longitude)]);
-          names.push(name);
-        }
-      });
-
-      const lat = latitudeInput;
-      const long = longitudeInput;
-      const maxDistance = maxDistanceInput;
-
-      const user = [lat, long];
-
-      // Calculate distances
-      let distList = [];
-      names.forEach((name, index) => {
-        const coords = gps[index];
-        if (coords[0] !== null && coords[1] !== null) {
-          const distance = haversine(user[0], user[1], coords[0], coords[1]);
-          distList.push({ distance, name, coords });
-        }
-      });
-
-      // Filter locations within the maximum distance
-      const filteredLocations = distList.filter(
-        (item) => item.distance <= maxDistance
-      );
-
-      // Sort the filtered locations by distance
-      filteredLocations.sort((a, b) => a.distance - b.distance);
-
-      // Store all locations in state
-      setLocations(filteredLocations);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  }
-
+  }, [coordinates, sliderValue, main]);
   return (
     <div className="main-home-page">
       <div className="contribute">
