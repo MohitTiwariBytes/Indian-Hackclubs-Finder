@@ -61,10 +61,19 @@ const HomePage = () => {
     'https://api2.hackclub.com/v0.1/Operations/Clubs?select={"fields":["Address Country","Name","Latitude","Longitude","Slack Channel ID"]}';
 
   useEffect(() => {
+    async function main(longitudeInput, latitudeInput, maxDistanceInput) {
+      try {
+        const response = await axios.get(url);
+        // Rest of your main function logic...
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+
     if (coordinates.latitude && coordinates.longitude) {
       main(coordinates.longitude, coordinates.latitude, sliderValue);
     }
-  }, [coordinates, sliderValue, main]);
+  }, [coordinates, sliderValue]);
 
   async function main(longitudeInput, latitudeInput, maxDistanceInput) {
     try {
